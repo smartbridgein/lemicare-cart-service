@@ -1,5 +1,6 @@
 package com.lemicare.shoppingcart.dto.request;
 
+import com.google.cloud.Timestamp;
 import lombok.Builder;
 import lombok.Data;
 
@@ -16,7 +17,7 @@ public class CartDto {
     private String status;
     private int totalItems;
     private double subtotalAmount;
-    private LocalDateTime createdAt;
-    private LocalDateTime lastModifiedAt;
+    private Timestamp createdAt;
+    private Timestamp lastModifiedAt;
     private List<CartItemDto> items;
 }

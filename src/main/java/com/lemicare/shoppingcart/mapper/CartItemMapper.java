@@ -15,7 +15,7 @@ public class CartItemMapper {
                 .cartItemId(cartItem.getCartItemId())
                 .productId(cartItem.getProductId())
                 .productName(cartItem.getProductName())
-                .productImageUrl(cartItem.getProductImageUrl())
+              //  .productImageUrl(cartItem.getProductImageUrl())
                 .priceAtAddToCart(cartItem.getPriceAtAddToCart())
                 .quantity(cartItem.getQuantity())
                 .itemTotalPrice(cartItem.getItemTotalPrice())

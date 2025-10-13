@@ -3,7 +3,7 @@
 # ===================================================================
 server:
   # A unique port for the shopping cart-service to avoid conflicts.
-  port: 8088
+  port: 8087
 
 # ===================================================================
 # CORE SPRING APPLICATION CONFIGURATION
@@ -68,8 +68,12 @@ services:
   cms:
     # The base URL of the storefront-service.
     # Feign will use this to construct the full request URL.
-    url: "http://localhost:8087" #
+    url: "http://localhost:8086" #
 
+  delivery:
+    # The base URL of the storefront-service.
+    # Feign will use this to construct the full request URL.
+    url: "http://localhost:8085" #
 
 # ===================================================================
 # ACTUATOR / MANAGEMENT ENDPOINTS

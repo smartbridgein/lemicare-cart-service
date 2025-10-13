@@ -1,9 +1,7 @@
 package com.lemicare.shoppingcart.controller;
 
-import com.lemicare.shoppingcart.dto.request.AddItemRequest;
-import com.lemicare.shoppingcart.dto.request.CartDto;
-import com.lemicare.shoppingcart.dto.request.MergeCartRequest;
-import com.lemicare.shoppingcart.dto.request.UpdateItemQuantityRequest;
+import com.lemicare.shoppingcart.dto.request.*;
+import com.lemicare.shoppingcart.dto.response.ShippingEstimate;
 import com.lemicare.shoppingcart.exception.CartNotFoundException;
 import com.lemicare.shoppingcart.exception.InsufficientStockException;
 import com.lemicare.shoppingcart.exception.ProductNotFoundException;
@@ -111,10 +109,6 @@ public class CartController {
         } catch (IllegalArgumentException e) {
             log.error("Invalid arguments for get cart details: {}", e.getMessage(), e);
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
-        } catch (ExecutionException | InterruptedException e) {
-            log.error("Internal server error during get cart details: {}", e.getMessage(), e);
-            Thread.currentThread().interrupt();
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to retrieve cart details due to internal error.", e);
         }
     }
 
@@ -247,6 +241,50 @@ public class CartController {
             log.error("Internal server error during merge guest cart: {}", e.getMessage(), e);
             Thread.currentThread().interrupt();
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to merge carts due to internal error.", e);
+        }
+    }
+
+    /**
+     * Estimates shipping costs for the current cart to a given pincode.
+     * This API should be called before proceeding to full checkout.
+     *
+     * @param orgId The ID of the tenant/organization.
+     * @param userId The ID of the logged-in user (from X-User-ID header).
+     * @param guestId The ID of the guest user (from _guest_id cookie).
+     * @return A list of available delivery options with estimated costs.
+     */
+
+    @GetMapping("/estimateshippingcost")
+    public ResponseEntity<ShippingEstimate> estimateShipping(
+            @PathVariable String orgId,
+            @RequestHeader(value = "X-User-ID", required = false) String userId,
+            @CookieValue(value = "_guest_id", required = false) String guestId,
+            @RequestParam("destinationPincode") @Valid int destinationPincode)   {
+
+        log.info("Received request to estimate shipping for orgId: {}, userId: {}, guestId: {}, pincode: {}",
+                orgId, userId, guestId, destinationPincode);
+
+        // You'll need to pass userId/guestId to the service layer as well
+        // You might consider adding userId/guestId fields directly to ShippingEstimateRequest
+        // or passing them separately. For now, let's assume service handles it.
+
+        try {
+
+            ShippingEstimate estimate = cartService.estimateShipping(orgId, userId, guestId, destinationPincode);
+            return ResponseEntity.ok(estimate);
+        } catch (CartNotFoundException e) {
+            log.warn("Cart not found when estimating shipping: {}", e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        } catch (IllegalArgumentException e) {
+            log.error("Invalid arguments for shipping estimation: {}", e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
+        } catch (ServiceCommunicationException e) {
+            log.error("Service communication error with delivery partner API during shipping estimation: {}", e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, "Could not get shipping estimates. Please try again later.", e);
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
     }
 }
