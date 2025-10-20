@@ -25,4 +25,13 @@ public class EntityConfiguration {
     StorefrontOrderRepository storefrontOrderRepository (Firestore firestore) {
         return new StorefrontOrderRepositoryImpl(firestore);
     }
+    @Bean
+    WishlistRepository wishlistRepository (Firestore firestore) {
+        return new WishlistRepositoryImpl(firestore);
+    }
+
+    @Bean
+    StorefrontProductRepository storefrontProductRepository (Firestore firestore) {
+        return new StorefrontProductRepositoryImpl(firestore);
+    }
 }

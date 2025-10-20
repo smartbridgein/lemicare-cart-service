@@ -69,7 +69,7 @@ if gcloud run deploy ${SERVICE_NAME} \
     --project=${PROJECT_ID} \
     --memory=512Mi \
     --cpu=1 \
-    --port=8088 \
+    --port=8087 \
      --set-env-vars="SPRING_PROFILES_ACTIVE=cloud,ALLOWED_ORIGINS=*"; then
           echo "✅ Service deployed successfully"
 else

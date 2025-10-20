@@ -19,6 +19,7 @@ import java.util.concurrent.ExecutionException;
 @RestController
 @RequestMapping("/api/public/cart/{orgId}")
 @Slf4j // For logging
+
 public class CartController {
 
     private final CartService cartService;

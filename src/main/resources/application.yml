@@ -63,17 +63,20 @@ services:
   inventory:
     # We point to the API Gateway's address, as it's the single entry point.
     # The RestTemplate client will use this base URL.
-    url: "http://localhost:8082/api/inventory"
+    url: "https://lemicare-inventory-service-511338430385.asia-south1.run.app"
+    #url: "http://localhost:8082/api/inventory"
 
   cms:
     # The base URL of the storefront-service.
     # Feign will use this to construct the full request URL.
-    url: "http://localhost:8086" #
+    url: "https://lemicare-cms-service-511338430385.asia-south1.run.app" #
+    #url: "http://localhost:8086" #
 
   delivery:
     # The base URL of the storefront-service.
     # Feign will use this to construct the full request URL.
-    url: "http://localhost:8085" #
+    url: "https://lemicare-delivery-service-511338430385.asia-south1.run.app"
+    #url: "http://localhost:8085" #
 
 # ===================================================================
 # ACTUATOR / MANAGEMENT ENDPOINTS
